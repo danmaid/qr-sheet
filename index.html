@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>QR Sheet</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <script defer src="https://cdn.jsdelivr.net/npm/qrcode-svg@1.1.0/dist/qrcode.min.js"
+    integrity="sha256-avvh68K6m0uwgz+fVcTrgO21gpA+qWEam+SWM6eqOwk=" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      height: 100%;
+      font-size: 6pt;
+      font-family: monospace;
+    }
+
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .sheet {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      height: 100%;
+    }
+
+    .qr {
+      width: 8em;
+      height: 8em;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      justify-content: end;
+      align-items: end;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sheet"></div>
+  <footer class="footer"></footer>
+
+  <script async>
+    function createItem() {
+      const id = crypto.randomUUID()
+      const qrcode = new QRCode({ container: "svg-viewbox", content: `https://danmaid.com/${id}` })
+      const wrapper = document.createElement('div')
+      wrapper.innerHTML = `<div>${id}</div>${qrcode.svg()}`
+      wrapper.querySelector('svg').classList.add('qr')
+      return wrapper
+    }
+    addEventListener('DOMContentLoaded', () => {
+      const sheet = document.querySelector('.sheet')
+      for (let i = 0; i < 9; i++) sheet.append(createItem())
+
+      const footer = document.querySelector('footer')
+      const id = crypto.randomUUID()
+      const qrcode = new QRCode({ container: "svg-viewbox", content: `https://danmaid.com/${id}` })
+      footer.innerHTML = `<span>${id}</span>${qrcode.svg()}`
+      footer.querySelector('svg').classList.add('qr')
+    })
+  </script>
+</body>
+
+</html>
